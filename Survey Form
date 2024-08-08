@@ -131,10 +131,6 @@
         </div>
 
         <div class="form-control">
-            <label>
-                Would you recommend GeeksforGeeks
-                to a friend?
-            </label>
 
             <!-- Input Type Radio Button -->
             <label for="recommed-1">
