@@ -1,0 +1,22 @@
+# Import the Counter() function from collections using the import keyword.
+from collections import Counter
+# Give the string as static input and store it in a variable.
+givenstrng = 'btech'
+# Calculate the frequency of all the given string elements
+# using the Counter() function which returns the element
+# and its frequency as key-value pair and
+# store this dictionary in a variable(say strngfreqelements)
+strngfreqelements = Counter(givenstrng)
+# Calculate the length of this frequency dictionary
+# using the len() function and store it in a variable.
+lengthfreq = len(strngfreqelements)
+# Calculate the length of the given string using
+# the len() function and store it in another variable.
+lengthstrng = len(givenstrng)
+# Check if both lengths are equal or not using the If conditional statement.
+# If both lengths are equal then the given string contains all the unique characters.
+if(lengthfreq == lengthstrng):
+    print('The given string [', givenstrng, '] contains unique characters')
+# Else the given string contains duplicate characters.
+else:
+    print('The given string [', givenstrng, '] contains duplicate characters')
