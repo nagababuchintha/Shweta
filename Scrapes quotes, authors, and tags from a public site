@@ -1,0 +1,65 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+BASE_URL = "http://quotes.toscrape.com"
+START_URL = BASE_URL + "/page/1/"
+
+def get_page_content(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return BeautifulSoup(response.text, "html.parser")
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching {url}: {e}")
+        return None
+
+def extract_quotes(soup):
+    quote_data = []
+    quotes = soup.find_all("div", class_="quote")
+
+    for quote in quotes:
+        text = quote.find("span", class_="text").get_text(strip=True)
+        author = quote.find("small", class_="author").get_text(strip=True)
+        tags = [tag.get_text(strip=True) for tag in quote.find_all("a", class_="tag")]
+        quote_data.append({"text": text, "author": author, "tags": tags})
+    
+    return quote_data
+
+def scrape_all_quotes():
+    all_quotes = []
+    next_page = START_URL
+
+    while next_page:
+        soup = get_page_content(next_page)
+        if not soup:
+            break
+
+        quotes = extract_quotes(soup)
+        all_quotes.extend(quotes)
+
+        next_btn = soup.find("li", class_="next")
+        if next_btn:
+            next_page = BASE_URL + next_btn.a["href"]
+        else:
+            next_page = None
+
+    return all_quotes
+
+def save_to_csv(quotes, filename="quotes.csv"):
+    with open(filename, mode="w", newline='', encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=["text", "author", "tags"])
+        writer.writeheader()
+        for quote in quotes:
+            writer.writerow({
+                "text": quote["text"],
+                "author": quote["author"],
+                "tags": ", ".join(quote["tags"])
+            })
+
+if __name__ == "__main__":
+    print("Scraping quotes...")
+    quotes = scrape_all_quotes()
+    print(f"Found {len(quotes)} quotes.")
+    save_to_csv(quotes)
+    print("Saved to quotes.csv")
