@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Student {
+private:
+    string name;
+    int roll;
+    float marks;
+
+public:
+    void getData() {
+        cout << "Enter name: ";
+        cin >> name;
+        cout << "Enter roll number: ";
+        cin >> roll;
+        cout << "Enter marks: ";
+        cin >> marks;
+    }
+
+    void displayData() {
+        cout << "Name: " << name << ", Roll: " << roll << ", Marks: " << marks << endl;
+    }
+};
+
+int main() {
+    vector<Student> students;
+    int n;
+    cout << "How many students? ";
+    cin >> n;
+
+    for (int i = 0; i < n; ++i) {
+        Student s;
+        cout << "Enter data for student " << i + 1 << ":\n";
+        s.getData();
+        students.push_back(s);
+    }
+
+    cout << "\n--- Student Records ---\n";
+    for (Student& s : students) {
+        s.displayData();
+    }
+
+    return 0;
+}
